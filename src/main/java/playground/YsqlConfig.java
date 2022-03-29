@@ -29,8 +29,8 @@ public class YsqlConfig extends AbstractYugabyteJdbcConfiguration {
         poolProperties.setProperty("dataSource.user", "yugabyte");
         poolProperties.setProperty("dataSource.password", "");
         poolProperties.setProperty("dataSource.loadBalance", "true");
-        poolProperties.setProperty("dataSource.topologyKeys", "ap-northeast-1.ap-northeast-1a");
-        poolProperties.setProperty("connectionInitSql", "set yb_read_from_followers = true");
+//        poolProperties.setProperty("dataSource.topologyKeys", "ap-northeast-1.ap-northeast-1a");
+//        poolProperties.setProperty("connectionInitSql", "set yb_read_from_followers = true");
         HikariConfig hikariConfig = new HikariConfig(poolProperties);
         return new HikariDataSource(hikariConfig);
     }
