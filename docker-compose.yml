@@ -1,0 +1,109 @@
+version: '2'
+services:
+  yb-master-n1:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-master
+      --fs_data_dirs=/mnt/master
+      --rpc_bind_addresses=yb-master-n1:7100
+      --master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --replication_factor=3
+      --placement_cloud=aws
+      --placement_region=ap-northeast-1
+      --placement_zone=ap-northeast-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.1:7000:7000"
+
+  yb-tserver-n1:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-tserver
+      --fs_data_dirs=/mnt/tserver
+      --rpc_bind_addresses=yb-tserver-n1:9100
+      --tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --server_broadcast_addresses=10.200.10.1
+      --placement_cloud=aws
+      --placement_region=ap-northeast-1
+      --placement_zone=ap-northeast-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.1:5433:5433"
+    depends_on:
+      - yb-master-n1
+
+  yb-master-n2:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-master
+      --fs_data_dirs=/mnt/master
+      --rpc_bind_addresses=yb-master-n2:7100
+      --master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --replication_factor=3
+      --placement_cloud=aws
+      --placement_region=us-east-1
+      --placement_zone=us-east-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.2:7000:7000"
+
+  yb-tserver-n2:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-tserver
+      --fs_data_dirs=/mnt/tserver
+      --rpc_bind_addresses=yb-tserver-n2:9100
+      --tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --server_broadcast_addresses=10.200.10.2
+      --placement_cloud=aws
+      --placement_region=us-east-1
+      --placement_zone=us-east-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.2:5433:5433"
+    depends_on:
+      - yb-master-n2
+
+  yb-master-n3:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-master
+      --fs_data_dirs=/mnt/master
+      --rpc_bind_addresses=yb-master-n3:7100
+      --master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --replication_factor=3
+      --placement_cloud=aws
+      --placement_region=eu-west-1
+      --placement_zone=eu-west-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.3:7000:7000"
+
+  yb-tserver-n3:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c "
+      rm -rf /tmp/.yb*;
+      /home/yugabyte/bin/yb-tserver
+      --fs_data_dirs=/mnt/tserver
+      --rpc_bind_addresses=yb-tserver-n3:9100
+      --tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100
+      --server_broadcast_addresses=10.200.10.3
+      --placement_cloud=aws
+      --placement_region=eu-west-1
+      --placement_zone=eu-west-1a
+      --use_private_ip=cloud
+      "
+    ports:
+      - "10.200.10.3:5433:5433"
+    depends_on:
+      - yb-master-n3
